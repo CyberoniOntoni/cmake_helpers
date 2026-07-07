@@ -6,7 +6,7 @@
 
 set(QT_NO_PRIVATE_MODULE_WARNING ON)
 
-if (NOT DESKTOP_APP_USE_PACKAGED)
+if (NOT DESKTOP_APP_USE_PACKAGED AND NOT DESKTOP_APP_USE_PACKAGED_QT)
     if (DEFINED ENV{QT})
         set(qt_requested $ENV{QT} CACHE STRING "Qt version" FORCE)
     endif()
@@ -64,7 +64,7 @@ else()
     endif()
 endif()
 
-if (NOT LINUX AND NOT DESKTOP_APP_USE_PACKAGED AND NOT qt_requested EQUAL QT_VERSION)
+if (NOT LINUX AND NOT DESKTOP_APP_USE_PACKAGED AND NOT DESKTOP_APP_USE_PACKAGED_QT AND NOT qt_requested EQUAL QT_VERSION)
     message(FATAL_ERROR "Configured Qt version ${QT_VERSION} does not match requested version ${qt_requested}. Please reconfigure.")
 endif()
 
@@ -81,6 +81,11 @@ endif()
 
 if (LINUX)
     find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS DBus WaylandCompositor QUIET)
+endif()
+
+if (WIN32 AND DESKTOP_APP_USE_PACKAGED_QT)
+    get_filename_component(DESKTOP_APP_QT_BIN_DIR "${Qt6_DIR}/../../../bin" ABSOLUTE)
+    set(DESKTOP_APP_QT_BIN_DIR ${DESKTOP_APP_QT_BIN_DIR} CACHE INTERNAL "Packaged Qt bin dir for build-time tools")
 endif()
 
 set_property(GLOBAL PROPERTY AUTOGEN_SOURCE_GROUP "(gen)")
