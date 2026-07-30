@@ -32,7 +32,7 @@ add_library(desktop-app::external_minizip ALIAS external_minizip)
 if (WIN32)
     target_include_directories(external_minizip SYSTEM
     INTERFACE
-        ${libs_loc}/zlib/contrib
+        ${libs_loc}/zlib/contrib/minizip
     )
     set(minizip_lib_loc ${libs_loc}/zlib/contrib/minizip)
     set_target_properties(external_minizip PROPERTIES
